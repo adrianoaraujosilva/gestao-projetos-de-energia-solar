@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  #MySQL
+  db:
+    image: mysql:5.7.22
+    container_name: db-energia-solar-api
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: projetos_energia_solar
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network-energia-solar-api
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    image: laravel_php
+    container_name: app-energia-solar-api
+    restart: unless-stopped
+    depends_on:
+      - db
+    tty: true
+    environment:
+      SERVICE_NAME: app-energia-solar-api
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network-energia-solar-api
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver-energia-solar-api
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - ./www:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network-energia-solar-api
+
+#Docker Networks
+networks:
+  app-network-energia-solar-api:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata-energia-solar-api:
+    driver: local

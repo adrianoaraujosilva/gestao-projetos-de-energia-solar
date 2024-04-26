@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS projetos_energia_solar;
