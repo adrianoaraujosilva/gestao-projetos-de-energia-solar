@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Access\AuthorizationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -38,6 +40,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if (($exception instanceof HttpException && $exception->getStatusCode() == 403) || $exception instanceof AuthorizationException) {
+            return response()->json(["message" => "This action is unauthorized.", "code" => 403], 403);
+        }
+
         if ($exception instanceof ModelNotFoundException) {
             return response()->json(
                 [
@@ -45,7 +51,8 @@ class Handler extends ExceptionHandler
                         ->replaceArray('?', [
                             Str::afterLast($exception->getModel(), "\\"),
                             collect($exception->getIds())->implode(',')
-                        ])
+                        ]),
+                    "code" => 404
                 ],
                 404
             );
