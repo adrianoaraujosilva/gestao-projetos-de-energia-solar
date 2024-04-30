@@ -10,13 +10,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Integrador extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Filterable;
 
     public const ACCESS_ADMIN       = 'ADMIN';
-    public const ACCESS_INTEGRATOR  = 'INTEGRATOR';
+    public const ACCESS_INTEGRATOR  = 'INTEGRADOR';
     public $access = self::ACCESS_ADMIN | self::ACCESS_INTEGRATOR;
+
+    protected $table = 'integradores';
 
     /**
      * The attributes that are mass assignable.
@@ -24,10 +26,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
-        'type',
-        'active',
+        'tipo',
+        'ativo',
         'password',
     ];
 
@@ -53,11 +55,11 @@ class User extends Authenticatable
 
     public function scopeIsAdmin($query)
     {
-        return $this->type === $this::ACCESS_ADMIN;
+        return $this->tipo === $this::ACCESS_ADMIN;
     }
 
     public function scopeIsActive($query)
     {
-        return $this->active === 1;
+        return $this->ativo === 1;
     }
 }

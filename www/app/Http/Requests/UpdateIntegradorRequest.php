@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class UpdateIntegradorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->user()->isAdmin() || $this->user->id === auth()->user()->id;
+        return auth()->user()->isAdmin() || $this->integrador->id === auth()->user()->id;
     }
 
     /**
@@ -22,8 +22,8 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'string',
-            'email'     => "email|unique:users,email,{$this->user->id}",
+            'nome'      => 'string',
+            'email'     => "email|unique:integradores,email,{$this->integrador->id}",
             'password'  => 'confirmed',
         ];
     }

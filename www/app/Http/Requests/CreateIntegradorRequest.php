@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends FormRequest
+class CreateIntegradorRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,10 +14,10 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string',
-            'email'     => 'required|email|unique:users',
+            'nome'      => 'required|string',
+            'email'     => 'required|email|unique:integradores',
             'password'  => 'required|confirmed',
-            'type'      => 'required|in:ADMIN,INTEGRATOR'
+            'tipo'      => 'required|in:ADMIN,INTEGRADOR'
         ];
     }
 }
