@@ -24,11 +24,11 @@ trait HttpResponse
 
     public function unauthorized(): JsonResponse
     {
-        return response()->json(["message" => "Unauthorized!", "code" => 401], 401);
+        return response()->json(["message" => "Unauthenticated.", "code" => 401], 401);
     }
 
     public function forbidden(): JsonResponse
     {
-        return response()->json(["message" => "Forbidden!", "code" => 403], 403);
+        return response()->json(["message" => "This action is unauthorized.", "code" => 403], 403);
     }
 }
