@@ -2,123 +2,138 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\UserFilter;
-use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\RegisterUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UpdateUserTypeRequest;
-use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Filters\IntegradorFilter;
+use App\Http\Requests\CreateIntegradorRequest;
+use App\Http\Requests\LoginIntegradorRequest;
+use App\Http\Requests\UpdateIntegradorRequest;
+use App\Http\Requests\UpdateIntegradorTipoRequest;
+use App\Models\Integrador;
+use App\Services\IntegradorService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Throwable;
-
 
 class IntegradorController extends Controller
 {
-    public function index(UserFilter $filters): JsonResponse
+    public function index(IntegradorFilter $filters, IntegradorService $integradorService): JsonResponse
     {
         try {
+            $listIntegrador = $integradorService->list($filters);
+
+            if ($listIntegrador['status'] === false) {
+                return $this->badRequest(message: $listIntegrador['message']);
+            }
+
             return $this->success(
-                message: 'Lista de integradores',
-                content: User::filter($filters)->paginate()
+                message: $listIntegrador['message'],
+                content: $listIntegrador['content']
             );
         } catch (\Throwable $th) {
             return $this->badRequest(message: $th);
         }
     }
 
-    public function register(RegisterUserRequest $registerUserRequest): JsonResponse
+    public function store(CreateIntegradorRequest $createIntegradorRequest, IntegradorService $integradorService): JsonResponse
     {
         try {
-            return $this->success(
-                message: 'Integrador cadastrado com sucesso',
-                content: new UserResource(User::create($registerUserRequest->validated()))
-            );
-        } catch (Throwable $th) {
-            return $this->badRequest(message: $th);
-        }
-    }
+            $createIntegrador = $integradorService->create($createIntegradorRequest->validated());
 
-    public function login(LoginUserRequest $loginUserRequest): JsonResponse
-    {
-        try {
-            if (Auth::attempt($loginUserRequest->validated()) && auth()->user()->isActive()) {
-                return $this->success(
-                    message: 'Login efetuado com sucesso',
-                    content: auth()
-                        ->user()
-                        ->createToken("API TOKEN")
-                        ->plainTextToken
-                );
+            if ($createIntegrador['status'] === false) {
+                return $this->badRequest(message: $createIntegrador['message']);
             }
 
-            return $this->unauthorized();
-        } catch (Throwable $th) {
-            return $this->badRequest(message: $th);
-        }
-    }
-
-    public function update(User $user, UpdateUserRequest $updateUserRequest): JsonResponse
-    {
-        try {
-            $updateUserRequest->validated();
             return $this->success(
-                message: 'Integrador atualizado com sucesso',
-                content: new UserResource(tap($user)->update(
-                    $updateUserRequest->safe()->only([
-                        'name',
-                        'email',
-                        'password',
-                    ])
-                ))
+                message: $createIntegrador['message'],
+                content: $createIntegrador['content']
             );
         } catch (Throwable $th) {
             return $this->badRequest(message: $th);
         }
     }
 
-    public function type(User $user, UpdateUserTypeRequest $updateUserTypeRequest): JsonResponse
+    public function login(LoginIntegradorRequest $loginIntegradorRequest, IntegradorService $integradorService): JsonResponse
     {
         try {
-            $updateUserTypeRequest->validated();
+            $tokenIntegrador = $integradorService->login($loginIntegradorRequest->validated());
+
+            if ($tokenIntegrador['status'] === false) {
+                return $this->unauthorized();
+            }
+
             return $this->success(
-                message: 'Tipo de integrador atualizado com sucesso',
-                content: new UserResource(tap($user)->update(
-                    $updateUserTypeRequest->safe()->only([
-                        'type'
-                    ])
-                ))
+                message: $tokenIntegrador['message'],
+                content: $tokenIntegrador['content']
             );
         } catch (Throwable $th) {
             return $this->badRequest(message: $th);
         }
     }
 
-    public function active(User $user): JsonResponse
+    public function update(Integrador $integrador, UpdateIntegradorRequest $updateIntegradorRequest, IntegradorService $integradorService): JsonResponse
     {
         try {
+            $updateIntegrador = $integradorService->update($integrador, $updateIntegradorRequest->validated());
+
+            if ($updateIntegrador['status'] === false) {
+                return $this->badRequest(message: $updateIntegrador['message']);
+            }
+
             return $this->success(
-                message: 'Integrador ativado com sucesso',
-                content: new UserResource(tap($user)->update([
-                    "active" => true
-                ]))
+                message: $updateIntegrador['message'],
+                content: $updateIntegrador['content']
             );
         } catch (Throwable $th) {
             return $this->badRequest(message: $th);
         }
     }
 
-    public function deactive(User $user): JsonResponse
+    public function type(Integrador $integrador, UpdateIntegradorTipoRequest $updateIntegradorTipoRequest, IntegradorService $integradorService): JsonResponse
     {
         try {
-            $user->tokens()->delete();
+            $updateTypeIntegrador = $integradorService->updateType($integrador, $updateIntegradorTipoRequest->validated());
+
+            if ($updateTypeIntegrador['status'] === false) {
+                return $this->badRequest(message: $updateTypeIntegrador['message']);
+            }
+
             return $this->success(
-                message: 'Integrador ativado com sucesso',
-                content: new UserResource(tap($user)->update([
-                    "active" => false
-                ]))
+                message: $updateTypeIntegrador['message'],
+                content: $updateTypeIntegrador['content']
+            );
+        } catch (Throwable $th) {
+            return $this->badRequest(message: $th);
+        }
+    }
+
+    public function deactive(Integrador $integrador, IntegradorService $integradorService): JsonResponse
+    {
+        try {
+            $deactiveIntegrador = $integradorService->deactive($integrador);
+
+            if ($deactiveIntegrador['status'] === false) {
+                return $this->badRequest(message: $deactiveIntegrador['message']);
+            }
+
+            return $this->success(
+                message: $deactiveIntegrador['message'],
+                content: $deactiveIntegrador['content']
+            );
+        } catch (Throwable $th) {
+            return $this->badRequest(message: $th);
+        }
+    }
+
+    public function active(Integrador $integrador, IntegradorService $integradorService): JsonResponse
+    {
+        try {
+            $activeIntegrador = $integradorService->active($integrador);
+
+            if ($activeIntegrador['status'] === false) {
+                return $this->badRequest(message: $activeIntegrador['message']);
+            }
+
+            return $this->success(
+                message: $activeIntegrador['message'],
+                content: $activeIntegrador['content']
             );
         } catch (Throwable $th) {
             return $this->badRequest(message: $th);

@@ -29,19 +29,19 @@ Route::middleware([
     'active',
 ])->group(function () {
 
-    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/integrador', fn (Request $request) => $request->user());
 
     Route::prefix('integradores')
         ->name('integradores.')
         ->middleware('admin')
         ->group(function () {
-            Route::post('/register', [IntegradorController::class, 'register'])->name('register');
+            Route::post('/', [IntegradorController::class, 'store'])->name('store');
             Route::get('/', [IntegradorController::class, 'index'])->name("index");
-            Route::patch('/{user}/type', [IntegradorController::class, 'type'])->name('type');
-            Route::patch('/{user}/deactive', [IntegradorController::class, 'deactive'])->name('deactive');
-            Route::patch('/{user}/active', [IntegradorController::class, 'active'])->name('active');
+            Route::patch('/{integrador}/tipo', [IntegradorController::class, 'type'])->name('type');
+            Route::patch('/{integrador}/desativar', [IntegradorController::class, 'deactive'])->name('deactive');
+            Route::patch('/{integrador}/ativar', [IntegradorController::class, 'active'])->name('active');
         });
-    Route::put('/integradores/{user}', [IntegradorController::class, 'update'])->name('integradores.update');
+    Route::put('/integradores/{integrador}', [IntegradorController::class, 'update'])->name('integradores.update');
 
     Route::prefix('clientes')
         ->name('clientes.')

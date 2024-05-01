@@ -14,6 +14,11 @@ class ClienteFilter extends QueryFilter
         parent::__construct($request);
     }
 
+    public function id($id)
+    {
+        return $this->builder->where('integradores.id', $id);
+    }
+
     public function nome($nome)
     {
         return $this->builder->where('clientes.nome', 'LIKE', "%$nome%");

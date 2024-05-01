@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserTypeRequest extends FormRequest
+class UpdateIntegradorTipoRequest extends FormRequest
 {
 
     /**
@@ -15,7 +15,7 @@ class UpdateUserTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type'  => 'required|in:ADMIN,INTEGRATOR'
+            'tipo'  => 'required|in:ADMIN,INTEGRADOR'
         ];
     }
 }
