@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Integrador;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class IntegradorSeeder extends Seeder
 {
