@@ -14,10 +14,10 @@ class UpdateClienteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'     => "required|email|unique:clientes,email,{$this->cliente->id}",
+            'email'     => "required|email|unique:clientes,email,{$this->cliente->id},id,integrador_id,{$this->user()->id}",
             'nome'      => 'required|max:100',
             'telefone'  => 'required|celular_com_ddd',
-            'cpf_cnpj'  => "required|cpf_ou_cnpj|unique:clientes,cpf_cnpj,{$this->cliente->id}"
+            'cpf_cnpj'  => "required|cpf_ou_cnpj|unique:clientes,cpf_cnpj,{$this->cliente->id},id,integrador_id,{$this->user()->id}",
         ];
     }
 

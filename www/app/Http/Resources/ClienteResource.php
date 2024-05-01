@@ -16,6 +16,7 @@ class ClienteResource extends JsonResource
     {
         return [
             'id'            => $this->id,
+            'integrador'    => new IntegradorResource($this->integrador),
             'nome'          => $this->nome,
             'email'         => $this->email,
             'telefone'      => $this->telefone,

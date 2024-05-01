@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClienteRequest extends FormRequest
+class CreateClienteRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,10 +14,10 @@ class StoreClienteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'     => 'required|email|unique:clientes',
-            'nome'      => 'required|max:100',
-            'telefone'  => 'required|celular_com_ddd',
-            'cpf_cnpj'  => 'required|cpf_ou_cnpj|unique:clientes'
+            'email'         => "required|email|unique:clientes,email,null,null,integrador_id,{$this->user()->id}",
+            'nome'          => 'required|max:100',
+            'telefone'      => 'required|celular_com_ddd',
+            'cpf_cnpj'      => "required|cpf_ou_cnpj|unique:clientes,cpf_cnpj,null,null,integrador_id,{$this->user()->id}",
         ];
     }
 
@@ -27,7 +27,7 @@ class StoreClienteRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'cpf_cnpj' => preg_replace('/\D/', '', $this->cpf_cnpj),
+            'cpf_cnpj'      => preg_replace('/\D/', '', $this->cpf_cnpj),
         ]);
     }
 }
