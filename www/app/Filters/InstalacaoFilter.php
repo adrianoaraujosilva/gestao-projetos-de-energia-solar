@@ -16,21 +16,21 @@ class InstalacaoFilter extends QueryFilter
 
     public function id($id)
     {
-        return $this->builder->where('integradores.id', $id);
+        return $this->builder->where('instalacoes.id', $id);
     }
 
     public function nome($nome)
     {
-        return $this->builder->where('clientes.nome', 'LIKE', "%$nome%");
+        return $this->builder->where('instalacoes.nome', 'LIKE', "%$nome%");
     }
 
     public function ordenar_id($type = null)
     {
-        return $this->builder->orderBy('clientes.id', (!$type || $type == 'asc') ? 'desc' : 'asc');
+        return $this->builder->orderBy('instalacoes.id', (!$type || $type == 'asc') ? 'desc' : 'asc');
     }
 
     public function ordenar_nome($type = null)
     {
-        return $this->builder->orderBy('clientes.nome', (!$type || $type == 'asc') ? 'desc' : 'asc');
+        return $this->builder->orderBy('instalacoes.nome', (!$type || $type == 'asc') ? 'desc' : 'asc');
     }
 }
