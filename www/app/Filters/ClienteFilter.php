@@ -16,7 +16,7 @@ class ClienteFilter extends QueryFilter
 
     public function id($id)
     {
-        return $this->builder->where('integradores.id', $id);
+        return $this->builder->where('clientes.id', $id);
     }
 
     public function nome($nome)
