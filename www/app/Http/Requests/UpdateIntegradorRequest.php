@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *   title="Requisição para atualizar integrador",
+ *   type="object",
+ * )
+ */
 class UpdateIntegradorRequest extends FormRequest
 {
     /**
@@ -16,6 +22,11 @@ class UpdateIntegradorRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @OA\Property(property="nome",type="string",example="integrador-01"),
+     * @OA\Property(property="email",type="string",example="integrador-01@admin.com"),
+     * @OA\Property(property="password",type="string",example="Admin@123"),
+     * @OA\Property(property="password_confirmation",type="string",example="Admin@123"),
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */

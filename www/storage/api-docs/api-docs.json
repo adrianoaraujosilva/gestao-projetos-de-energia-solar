@@ -1,0 +1,1351 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Gestao Projetos de Energia Solar",
+        "description": "Sistema CRUD desenvolvido utilizando a framework Laravel em PHP é voltado para a gestão de projetos de energia solar. Ele adere aos princípios da arquitetura limpa (Clean Architecture), incorporando testes unitários para assegurar a qualidade do código. Além disso, oferece uma documentação abrangente para facilitar o entendimento e a manutenção do sistema.",
+        "contact": {
+            "email": "adriano@instalustres.com.br"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/clientes": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Exibe lista de clientes",
+                "description": "",
+                "operationId": "getClientesIndex",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Filtrar pelo ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "nome",
+                        "in": "query",
+                        "description": "Filtrar pelo nome",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filtrar pelo email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "telefone",
+                        "in": "query",
+                        "description": "Filtrar pelo telefone",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "cpf_cnpj",
+                        "in": "query",
+                        "description": "Filtrar pelo CPF/CNPJ",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenar_id",
+                        "in": "query",
+                        "description": "Ordenar pelo ID",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "ordenar_nome",
+                        "in": "query",
+                        "description": "Ordenar pelo nome",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lista de clientes."
+                                        },
+                                        "content": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ClienteResource"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/CustomPaginator"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Cadastra novo cliente",
+                "description": "",
+                "operationId": "postClientesStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateClienteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente cadastrado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/ClienteResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo cpf cnpj não é um CPF ou CNPJ válido."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "nome": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo cpf cnpj não é um CPF ou CNPJ válido."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/clientes/{id}": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Pesquisa cliente pelo ID",
+                "description": "",
+                "operationId": "getClientesShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente ID: 2"
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/ClienteResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Atualiza os dados do cliente",
+                "description": "",
+                "operationId": "putClientesUpdate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateClienteRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cliente atualizado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/ClienteResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo cpf cnpj não é um CPF ou CNPJ válido."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo cpf cnpj não é um CPF ou CNPJ válido."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/integradores": {
+            "get": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Exibe lista de integradores",
+                "description": "",
+                "operationId": "getIntegradoresIndex",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Filtrar pelo ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "nome",
+                        "in": "query",
+                        "description": "Filtrar pelo nome",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filtrar pelo email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipo",
+                        "in": "query",
+                        "description": "Filtrar pelo tipo",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "INTEGRADOR",
+                                "ADMIN"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "ativo",
+                        "in": "query",
+                        "description": "Filtrar pelo status",
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    {
+                        "name": "ordenar_id",
+                        "in": "query",
+                        "description": "Ordenar pelo ID",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "ordenar_nome",
+                        "in": "query",
+                        "description": "Ordenar pelo nome",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lista de integradores."
+                                        },
+                                        "content": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/IntegradorResource"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/CustomPaginator"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Cadastra novo integrador",
+                "description": "",
+                "operationId": "postIntegradoresStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateIntegradorRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Integrador cadastrado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/IntegradorResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo nome é obrigatório. (e mais 1 erro)"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "nome": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo nome é obrigatório."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Envie seu e-mail e senha e retornaremos um token. Use o token no cabeçalho 'Authorization' da requisição como 'Bearer TOKEN'",
+                "description": "",
+                "operationId": "postIntegradoresLogin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginIntegradorRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login efetuado com sucesso."
+                                        },
+                                        "content": {
+                                            "type": "string",
+                                            "example": "99|OOawESyfhebDhYX0LXxnn5as3fV1R3B79uZvH22Ec0df7515"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo email é obrigatório. (e mais 1 erro)"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo email é obrigatório."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/integradores/{id}": {
+            "put": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Atualiza os dados do integrador",
+                "description": "",
+                "operationId": "putIntegradoresUpdate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do integrador",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateIntegradorRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Integrador atualizado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/IntegradorResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo email já está sendo utilizado."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo email já está sendo utilizado."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/integradores/{id}/tipo": {
+            "patch": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Atualiza o tipo do integrador",
+                "description": "",
+                "operationId": "pathIntegradoresType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do integrador",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateIntegradorTipoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Tipo de integrador atualizado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/IntegradorResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo tipo selecionado é inválido."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo tipo selecionado é inválido."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/integradores/{id}/desativar": {
+            "patch": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Desativar o integrador",
+                "description": "",
+                "operationId": "pathIntegradoresDeactive",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do integrador",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Integrador desativado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/IntegradorResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/integradores/{id}/ativar": {
+            "patch": {
+                "tags": [
+                    "Integradores"
+                ],
+                "summary": "Ativar o integrador",
+                "description": "",
+                "operationId": "pathIntegradoresActive",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do integrador",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 2
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Integrador ativado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/IntegradorResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateClienteRequest": {
+                "title": "Requisição para gravar cliente",
+                "required": [
+                    "nome",
+                    "email",
+                    "telefone",
+                    "cpf_cnpj"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "Cliente 01"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "cliente-01@admin.com"
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "(11) 99999-9990"
+                    },
+                    "cpf_cnpj": {
+                        "type": "string",
+                        "example": "999.999.999-99"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateIntegradorRequest": {
+                "title": "Requisição para gravar integrador",
+                "required": [
+                    "nome",
+                    "email",
+                    "tipo",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "admin@admin.com"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "admin@admin.com"
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "example": "INTEGRADOR"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "Admin@123"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "example": "Admin@123"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginIntegradorRequest": {
+                "title": "Requisição para efetuar login",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "admin@admin.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "Admin@123"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateClienteRequest": {
+                "title": "Requisição para atualizar cliente",
+                "required": [
+                    "nome",
+                    "email",
+                    "telefone",
+                    "cpf_cnpj"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "Cliente 01"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "cliente-01@admin.com"
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "(11) 99999-9990"
+                    },
+                    "cpf_cnpj": {
+                        "type": "string",
+                        "example": "999.999.999-99"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateIntegradorRequest": {
+                "title": "Requisição para atualizar integrador",
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "integrador-01"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "integrador-01@admin.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "Admin@123"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "example": "Admin@123"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateIntegradorTipoRequest": {
+                "title": "Requisição para atualizar tipo do integrador",
+                "properties": {
+                    "tipo": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "enum": [
+                            "INTEGRADOR",
+                            "ADMIN"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ClienteResource": {
+                "title": "Retorna dados do cliente",
+                "properties": {
+                    "id": {
+                        "description": "Transform the resource into an array.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "integrador": {
+                        "$ref": "#/components/schemas/IntegradorResource"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Integrador-01"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "integrador-01@admin.com"
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "(11) 99999-9990"
+                    },
+                    "cpf_cnpj": {
+                        "type": "string",
+                        "example": "99999999999"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "IntegradorResource": {
+                "title": "Retornoadados do integrador",
+                "properties": {
+                    "id": {
+                        "description": "Transform the resource into an array.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Admin"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "admin@admin.com"
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "example": "INTEGRADOR"
+                    },
+                    "ativo": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "CustomPaginator": {
+                "title": "Retorno de paginação",
+                "properties": {
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "first_page_url": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/modelo?page=1"
+                            },
+                            "from": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "last_page": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "last_page_url": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/modelo?page=1"
+                            },
+                            "next_page_url": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "path": {
+                                "type": "string",
+                                "example": "http://localhost:8000/api/modelo"
+                            },
+                            "per_page": {
+                                "type": "integer",
+                                "example": 15
+                            },
+                            "prev_page_url": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "to": {
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "total": {
+                                "type": "integer",
+                                "example": 3
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "example": "http://localhost:8000/api/modelo?page=1"
+                                },
+                                "label": {
+                                    "type": "string",
+                                    "example": "1"
+                                },
+                                "active": {
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Insira o token no formato (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Endpoint para efetuar login"
+        },
+        {
+            "name": "Integradores",
+            "description": "Endpoints para manutenção dos Integradores (Somente integrador do tipo 'ADMIN')"
+        },
+        {
+            "name": "Clientes",
+            "description": "Endpoints para manutenção dos Clientes"
+        }
+    ]
+}
