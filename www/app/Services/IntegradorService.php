@@ -36,10 +36,7 @@ class IntegradorService
         if (Auth::attempt($request) && auth()->user()->isActive()) {
             return $this->response(
                 message: 'Login efetuado com sucesso.',
-                content: auth()
-                    ->user()
-                    ->createToken("API TOKEN")
-                    ->plainTextToken
+                content: auth()->user()->createToken("API TOKEN")->plainTextToken
             );
         }
 
