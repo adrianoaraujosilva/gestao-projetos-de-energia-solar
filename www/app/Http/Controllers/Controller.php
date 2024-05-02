@@ -31,12 +31,17 @@ use Illuminate\Routing\Controller as BaseController;
  *
  * @OA\Tag(
  *   name="Integradores",
- *   description="Endpoints para manutenção dos Integradores (Somente integrador do tipo 'ADMIN')",
+ *   description="Endpoints para manutenção dos integradores (Somente integrador do tipo 'ADMIN')",
  * )
  *
  * @OA\Tag(
  *   name="Clientes",
- *   description="Endpoints para manutenção dos Clientes",
+ *   description="Endpoints para manutenção dos clientes",
+ * )
+ *
+ * @OA\Tag(
+ *   name="Instalações",
+ *   description="Endpoints para manutenção das instalações",
  * )
  *
  */

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IntegradorController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\InstalacaoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,5 +51,14 @@ Route::middleware([
             Route::post('/', [ClienteController::class, 'store'])->name("store");
             Route::get('/{cliente}', [ClienteController::class, 'show'])->name("show");
             Route::put('/{cliente}', [ClienteController::class, 'update'])->name("update");
-        })->name("clientes.");
+        });
+
+    Route::prefix('instalacoes')
+        ->name('instalacoes.')
+        ->group(function () {
+            Route::get('/', [InstalacaoController::class, 'index'])->name("index");
+            Route::get('/{instalacao}', [InstalacaoController::class, 'show'])->name("show");
+            Route::post('/', [InstalacaoController::class, 'store'])->name("store")->middleware('admin');
+            Route::put('/{instalacao}', [InstalacaoController::class, 'update'])->name("update")->middleware('admin');
+        })->name("instalacoes.");
 });
