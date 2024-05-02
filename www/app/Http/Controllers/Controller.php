@@ -44,6 +44,11 @@ use Illuminate\Routing\Controller as BaseController;
  *   description="Endpoints para manutenção das instalações",
  * )
  *
+ * @OA\Tag(
+ *   name="Equipamentos",
+ *   description="Endpoints para manutenção dos equipamentos",
+ * )
+ *
  */
 class Controller extends BaseController
 {

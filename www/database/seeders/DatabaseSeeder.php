@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             IntegradorSeeder::class,
             ClienteSeeder::class,
             InstalacaoSeeder::class,
+            EquipamentoSeeder::class,
         ]);
     }
 }

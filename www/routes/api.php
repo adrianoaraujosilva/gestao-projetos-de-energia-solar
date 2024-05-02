@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IntegradorController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EquipamentoController;
 use App\Http\Controllers\InstalacaoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -60,5 +61,14 @@ Route::middleware([
             Route::get('/{instalacao}', [InstalacaoController::class, 'show'])->name("show");
             Route::post('/', [InstalacaoController::class, 'store'])->name("store")->middleware('admin');
             Route::put('/{instalacao}', [InstalacaoController::class, 'update'])->name("update")->middleware('admin');
-        })->name("instalacoes.");
+        });
+
+    Route::prefix('equipamentos')
+        ->name('equipamentos.')
+        ->group(function () {
+            Route::get('/', [EquipamentoController::class, 'index'])->name("index");
+            Route::get('/{equipamento}', [EquipamentoController::class, 'show'])->name("show");
+            Route::post('/', [EquipamentoController::class, 'store'])->name("store")->middleware('admin');
+            Route::put('/{equipamento}', [EquipamentoController::class, 'update'])->name("update")->middleware('admin');
+        });
 });

@@ -394,6 +394,357 @@
                 ]
             }
         },
+        "/api/equipamentos": {
+            "get": {
+                "tags": [
+                    "Equipamentos"
+                ],
+                "summary": "Exibe lista de equipamentos",
+                "description": "",
+                "operationId": "getEquipamentosIndex",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Filtrar pelo ID",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "nome",
+                        "in": "query",
+                        "description": "Filtrar pelo nome",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ordenar_id",
+                        "in": "query",
+                        "description": "Ordenar pelo ID",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "ordenar_nome",
+                        "in": "query",
+                        "description": "Ordenar pelo nome",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lista de equipamentos."
+                                        },
+                                        "content": {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/EquipamentoResource"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/CustomPaginator"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Equipamentos"
+                ],
+                "summary": "Cadastra novo equipamento (Somente integrador do tipo 'ADMIN')",
+                "description": "",
+                "operationId": "postEquipamentosStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateEquipamentoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Equipamento cadastrado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/EquipamentoResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo nome já está sendo utilizado."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "nome": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo nome já está sendo utilizado."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/equipamentos/{id}": {
+            "get": {
+                "tags": [
+                    "Equipamentos"
+                ],
+                "summary": "Pesquisa equipamento pelo ID",
+                "description": "",
+                "operationId": "getEquipamentosShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do equipamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Equipamento ID: 2"
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/EquipamentoResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Equipamentos"
+                ],
+                "summary": "Atualiza os dados da Equipamento (Somente integrador do tipo 'ADMIN')",
+                "description": "",
+                "operationId": "putEquipamentosUpdate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da Equipamento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateEquipamentoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Equipamento atualizado com sucesso."
+                                        },
+                                        "content": {
+                                            "$ref": "#/components/schemas/EquipamentoResource"
+                                        },
+                                        "code": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "description": "Unauthenticated."
+                    },
+                    "403": {
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "description": "Not Found."
+                    },
+                    "422": {
+                        "description": "Unprocessable Content.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo nome já está sendo utilizado."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo nome já está sendo utilizado."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/instalacoes": {
             "get": {
                 "tags": [
@@ -660,7 +1011,7 @@
                         "schema": {
                             "type": "integer"
                         },
-                        "example": 2
+                        "example": 1
                     }
                 ],
                 "requestBody": {
@@ -1408,6 +1759,20 @@
                 },
                 "type": "object"
             },
+            "CreateEquipamentoRequest": {
+                "title": "Requisição para gravar equipamento",
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "Estrutura"
+                    }
+                },
+                "type": "object"
+            },
             "CreateInstalacaoRequest": {
                 "title": "Requisição para gravar instalação",
                 "required": [
@@ -1504,6 +1869,20 @@
                 },
                 "type": "object"
             },
+            "UpdateEquipamentoRequest": {
+                "title": "Requisição para atualizar equipamento",
+                "required": [
+                    "nome"
+                ],
+                "properties": {
+                    "nome": {
+                        "description": "Get the validation rules that apply to the request.",
+                        "type": "string",
+                        "example": "Estrutura"
+                    }
+                },
+                "type": "object"
+            },
             "UpdateInstalacaoRequest": {
                 "title": "Requisição para atualizar instalação",
                 "required": [
@@ -1581,6 +1960,29 @@
                     "cpf_cnpj": {
                         "type": "string",
                         "example": "99999999999"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2024-04-30T23:29:52.000000Z"
+                    }
+                },
+                "type": "object"
+            },
+            "EquipamentoResource": {
+                "title": "Retorna dados do equipamento",
+                "properties": {
+                    "id": {
+                        "description": "Transform the resource into an array.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Estrutura"
                     },
                     "created_at": {
                         "type": "string",
@@ -1752,6 +2154,10 @@
         {
             "name": "Instalações",
             "description": "Endpoints para manutenção das instalações"
+        },
+        {
+            "name": "Equipamentos",
+            "description": "Endpoints para manutenção das equipamentos"
         }
     ]
 }
