@@ -4,6 +4,7 @@ use App\Http\Controllers\IntegradorController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EquipamentoController;
 use App\Http\Controllers\InstalacaoController;
+use App\Http\Controllers\ProjetoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -70,5 +71,14 @@ Route::middleware([
             Route::get('/{equipamento}', [EquipamentoController::class, 'show'])->name("show");
             Route::post('/', [EquipamentoController::class, 'store'])->name("store")->middleware('admin');
             Route::put('/{equipamento}', [EquipamentoController::class, 'update'])->name("update")->middleware('admin');
+        });
+
+    Route::prefix('projetos')
+        ->name('projetos.')
+        ->group(function () {
+            Route::get('/', [ProjetoController::class, 'index'])->name("index");
+            Route::get('/{projeto}', [ProjetoController::class, 'show'])->name("show");
+            Route::post('/', [ProjetoController::class, 'store'])->name("store");
+            Route::put('/{projeto}', [ProjetoController::class, 'update'])->name("update");
         });
 });

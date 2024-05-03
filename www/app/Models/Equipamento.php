@@ -10,6 +10,10 @@ class Equipamento extends Model
 {
     use HasFactory, Filterable;
 
-    protected $table = 'equipamentos';
     protected $fillable = ['nome'];
+
+    public function projetos()
+    {
+        return $this->belongsToMany(Projeto::class, 'equipamentos_projetos', 'equipamento_id', 'projeto_id');
+    }
 }

@@ -33,7 +33,7 @@ class EquipamentoService
     public function find(Equipamento $equipamento): array
     {
         return $this->response(
-            message: "Equipamento ID: {$equipamento->id}.",
+            message: "Equipamento ID: {$equipamento->id}",
             content: new EquipamentoResource($equipamento)
         );
     }
