@@ -8,8 +8,6 @@ use Illuminate\Database\Seeder;
 
 class IntegradorSeeder extends Seeder
 {
-    private const SENHA = 'Admin@123';
-
     /**
      * Run the database seeds.
      */
@@ -20,23 +18,9 @@ class IntegradorSeeder extends Seeder
         ], [
             'nome'      => 'Admin',
             'tipo'      => 'ADMIN',
-            'password'  => $this::SENHA,
+            'password'  => 'Admin@123',
         ]);
 
-        Integrador::updateOrCreate([
-            'email'     => 'integrador-01@admin.com',
-        ], [
-            'nome'      => 'Integrador-01',
-            'tipo'      => 'INTEGRADOR',
-            'password'  => $this::SENHA,
-        ]);
-
-        Integrador::updateOrCreate([
-            'email'     => 'integrador-02@admin.com',
-        ], [
-            'nome'      => 'Integrador-02',
-            'tipo'      => 'INTEGRADOR',
-            'password'  => $this::SENHA,
-        ]);
+        Integrador::factory()->count(10)->create();
     }
 }

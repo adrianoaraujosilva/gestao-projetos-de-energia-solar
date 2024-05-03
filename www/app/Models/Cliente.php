@@ -19,18 +19,18 @@ class Cliente extends Model
         parent::boot();
 
         // Injeta ID do usuário como código do integrador para o cliente
-        if (auth()->hasUser()) {
-            static::creating(function ($model) {
+        static::creating(function ($model) {
+            if (auth()->hasUser()) {
                 $model->integrador_id = auth()->user()->id;
-            });
-        }
+            }
+        });
 
         // Se não for ADM, Injeta ID do usuário como código do integrador para filtrar
-        if (auth()->hasUser() && !auth()->user()->isAdmin()) {
-            static::addGlobalScope('integrador_id', function (Builder $builder) {
+        static::addGlobalScope('integrador_id', function (Builder $builder) {
+            if (auth()->hasUser() && !auth()->user()->isAdmin()) {
                 $builder->where('integrador_id', auth()->user()->id);
-            });
-        }
+            }
+        });
     }
 
     public function integrador()
