@@ -7,6 +7,8 @@ use App\Http\Resources\ClienteResource;
 use App\Models\Cliente;
 use App\Traits\ServiceResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ClienteService
 {
@@ -45,14 +47,20 @@ class ClienteService
 
     public function update(Cliente $cliente, array $request): array
     {
-        $updateCliente = tap($cliente->loadMissing('integrador'))
-            ->update(
-                Arr::except($request, 'integrador_id')
-            );
+        try {
+            Cliente::findOrFail($cliente->id ?? null);
+            $updateCliente = tap($cliente->loadMissing('integrador'))
+                ->update(
+                    Arr::except($request, 'integrador_id')
+                );
 
-        return $this->response(
-            message: 'Cliente atualizado com sucesso.',
-            content: new ClienteResource($updateCliente)
-        );
+            return $this->response(
+                message: 'Cliente atualizado com sucesso.',
+                content: new ClienteResource($updateCliente)
+            );
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            return $this->response(status: false, message: "Cliente não encontrado.");
+        }
     }
 }

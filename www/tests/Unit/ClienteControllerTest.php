@@ -20,8 +20,9 @@ class ClienteControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Executa migrações
+        // Executa migrações e semea o banco
         Artisan::call('migrate');
+        Artisan::call('db:seed');
 
         // Recupera 1º integrador
         $this->integrador = Integrador::where('tipo', 'INTEGRADOR')->first();
