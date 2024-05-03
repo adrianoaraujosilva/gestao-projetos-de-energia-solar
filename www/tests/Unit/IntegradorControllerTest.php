@@ -6,7 +6,6 @@ use Tests\TestCase;
 
 use App\Models\Integrador;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Artisan;
 
 class IntegradorControllerTest extends TestCase
 {
@@ -18,9 +17,6 @@ class IntegradorControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Executa migrações e semea o banco
-        Artisan::call('migrate');
-        Artisan::call('db:seed');
 
         // Recupera 1º integrador
         $this->integrador = Integrador::where('tipo', 'ADMIN')->first();

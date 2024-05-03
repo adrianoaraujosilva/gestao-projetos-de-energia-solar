@@ -6,6 +6,8 @@ use App\Filters\InstalacaoFilter;
 use App\Http\Resources\InstalacaoResource;
 use App\Models\Instalacao;
 use App\Traits\ServiceResponse;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class InstalacaoService
 {
@@ -40,11 +42,17 @@ class InstalacaoService
 
     public function update(Instalacao $instalacao, array $request): array
     {
-        $updateInstalacao = tap($instalacao)->update($request);
+        try {
+            Instalacao::findOrFail($instalacao->id ?? null);
+            $updateInstalacao = tap($instalacao)->update($request);
 
-        return $this->response(
-            message: 'Instalação atualizada com sucesso.',
-            content: new InstalacaoResource($updateInstalacao)
-        );
+            return $this->response(
+                message: 'Instalação atualizada com sucesso.',
+                content: new InstalacaoResource($updateInstalacao)
+            );
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            return $this->response(status: false, message: "Instalação não encontrada.");
+        }
     }
 }

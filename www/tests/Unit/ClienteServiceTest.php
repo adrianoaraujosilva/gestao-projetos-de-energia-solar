@@ -117,9 +117,7 @@ class ClienteServiceTest extends TestCase
     public function testUpdateNotFound()
     {
         // Criar um cliente de exemplo
-        // $cliente = Cliente::factory(["id" => 99999999])->make();
         $cliente = new Cliente();
-
 
         // Chamar o método update da ClienteService com um ID inexistente
         $clienteService = new ClienteService();
