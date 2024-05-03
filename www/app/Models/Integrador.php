@@ -54,6 +54,11 @@ class Integrador extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function cliente()
+    {
+        return $this->hasMany(Cliente::class, 'integrador_id', 'id');
+    }
+
     public function scopeIsAdmin($query)
     {
         return $this->tipo === $this::ACCESS_ADMIN;
