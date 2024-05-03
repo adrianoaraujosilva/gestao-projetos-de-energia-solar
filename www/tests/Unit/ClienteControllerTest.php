@@ -35,8 +35,8 @@ class ClienteControllerTest extends TestCase
         // Simule uma requisição para o método index
         $response = $this->actingAs($this->integrador)->get($this->clienteEndpoint);
 
-        // Verifique se a resposta é um JSON e se o status é 200
-        $response->assertStatus(200);
+        // Verificar se a resposta é um JSON e se o status é 200
+        $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
     }
 
     public function testStore(): void
@@ -47,8 +47,8 @@ class ClienteControllerTest extends TestCase
         // Simule uma requisição POST com dados válidos
         $response = $this->actingAs($this->integrador)->post($this->clienteEndpoint, $cliente);
 
-        // Verifique se a resposta é o status é 200
-        $response->assertStatus(200);
+        // Verificar se a resposta é um JSON e se o status é 200
+        $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
     }
 
     public function testShow()
@@ -56,8 +56,8 @@ class ClienteControllerTest extends TestCase
         // Simule uma requisição para o método show com o ID do cliente criado
         $response = $this->actingAs($this->integrador)->get("/api/clientes/{$this->cliente->id}");
 
-        // Verifique se a resposta é o status é 200
-        $response->assertStatus(200);
+        // Verificar se a resposta é um JSON e se o status é 200
+        $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
     }
 
     public function testUpdate()
@@ -68,7 +68,25 @@ class ClienteControllerTest extends TestCase
         // Simule uma requisição PUT com dados válidos
         $response = $this->actingAs($this->integrador)->put("/api/clientes/{$this->cliente->id}", $cliente);
 
-        // Verifique se a resposta é um JSON e se o status é 200
-        $response->assertJson(['message' => 'Cliente atualizado com sucesso.'])->assertStatus(200);
+        // Verificar se a resposta é um JSON e se o status é 200
+        $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
+    }
+
+    public function testValidationErrorsOnStore()
+    {
+        // Simular uma requisição POST com dados inválidos
+        $response = $this->actingAs($this->integrador)->post($this->clienteEndpoint, []);
+
+        // Verificar se a resposta é um JSON e se o status é 422 (Unprocessable Entity)
+        $response->assertJsonStructure(['message', 'errors'])->assertStatus(422);
+    }
+
+    public function testNotFoundOnShow()
+    {
+        // Simular uma requisição para o método show com um ID inexistente
+        $response = $this->actingAs($this->integrador)->get("/api/clientes/9999");
+
+        // Verificar se a resposta é um JSON e se o status é 404 (Not Found)
+        $response->assertJsonStructure(['message'])->assertStatus(404);
     }
 }

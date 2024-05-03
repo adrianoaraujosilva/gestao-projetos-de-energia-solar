@@ -20,7 +20,9 @@ class Cliente extends Model
 
         // Injeta ID do usuário como código do integrador para o cliente
         static::creating(function ($model) {
-            $model->integrador_id = auth()->user()->id;
+            if (auth()->hasUser()) {
+                $model->integrador_id = auth()->user()->id;
+            }
         });
 
         // Se não for ADM, Injeta ID do usuário como código do integrador para filtrar
