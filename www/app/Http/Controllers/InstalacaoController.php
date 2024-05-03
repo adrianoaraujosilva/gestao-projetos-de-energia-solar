@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Filters\InstalacaoFilter;
-use App\Http\Requests\CreateClienteRequest;
 use App\Http\Requests\CreateInstalacaoRequest;
 use App\Http\Requests\UpdateInstalacaoRequest;
 use App\Models\Instalacao;
-use App\Services\ClienteService;
 use App\Services\InstalacaoService;
 use Illuminate\Http\JsonResponse;
 use Throwable;
@@ -49,7 +47,7 @@ class InstalacaoController extends Controller
     public function index(InstalacaoFilter $filters, InstalacaoService $instalacaoService): JsonResponse
     {
         try {
-            $listInstalacoes = $instalacaoService->list($filters);
+            $listInstalacoes = $instalacaoService->findAll($filters);
 
             if ($listInstalacoes['status'] === false) {
                 return $this->badRequest(message: $listInstalacoes['message']);

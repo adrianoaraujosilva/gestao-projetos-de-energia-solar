@@ -13,7 +13,7 @@ class IntegradorService
 {
     use ServiceResponse;
 
-    public function list(IntegradorFilter $filters): array
+    public function findAll(IntegradorFilter $filters): array
     {
         return $this->response(
             message: 'Lista de integradores.',

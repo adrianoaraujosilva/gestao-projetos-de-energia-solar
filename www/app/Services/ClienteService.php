@@ -12,7 +12,7 @@ class ClienteService
 {
     use ServiceResponse;
 
-    public function list(ClienteFilter $filters): array
+    public function findAll(ClienteFilter $filters): array
     {
         return $this->response(
             message: 'Lista de Clientes.',

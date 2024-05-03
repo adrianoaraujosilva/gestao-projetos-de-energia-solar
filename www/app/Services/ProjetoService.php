@@ -15,7 +15,7 @@ class ProjetoService
 {
     use ServiceResponse;
 
-    public function list(ProjetoFilter $filters): array
+    public function findAll(ProjetoFilter $filters): array
     {
         return $this->response(
             message: 'Lista de projetos.',
