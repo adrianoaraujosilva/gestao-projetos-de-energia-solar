@@ -77,7 +77,7 @@ class InstalacaoServiceTest extends TestCase
         // Criar um instalação de exemplo
         $instalacao = Instalacao::factory()->create();
 
-        // Gerar dados de atualização de instalaçã0 de exemplo
+        // Gerar dados de atualização de instalação de exemplo
         $requestData = Instalacao::factory()->make()->toArray();
 
         // Chamar o método update da InstalacaoService
