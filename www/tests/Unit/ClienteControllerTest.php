@@ -7,7 +7,7 @@ use Tests\TestCase;
 use App\Models\Cliente;
 use App\Models\Integrador;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Artisan;;
+use Illuminate\Support\Facades\Artisan;
 
 class ClienteControllerTest extends TestCase
 {
@@ -54,7 +54,7 @@ class ClienteControllerTest extends TestCase
     public function testShow()
     {
         // Simule uma requisição para o método show com o ID do cliente criado
-        $response = $this->actingAs($this->integrador)->get("/api/clientes/{$this->cliente->id}");
+        $response = $this->actingAs($this->integrador)->get("$this->clienteEndpoint/{$this->cliente->id}");
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -66,7 +66,7 @@ class ClienteControllerTest extends TestCase
         $cliente = Cliente::factory()->make()->toArray();
 
         // Simule uma requisição PUT com dados válidos
-        $response = $this->actingAs($this->integrador)->put("/api/clientes/{$this->cliente->id}", $cliente);
+        $response = $this->actingAs($this->integrador)->put("$this->clienteEndpoint/{$this->cliente->id}", $cliente);
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -84,7 +84,7 @@ class ClienteControllerTest extends TestCase
     public function testNotFoundOnShow()
     {
         // Simular uma requisição para o método show com um ID inexistente
-        $response = $this->actingAs($this->integrador)->get("/api/clientes/9999");
+        $response = $this->actingAs($this->integrador)->get("$this->clienteEndpoint/9999");
 
         // Verificar se a resposta é um JSON e se o status é 404 (Not Found)
         $response->assertJsonStructure(['message'])->assertStatus(404);
