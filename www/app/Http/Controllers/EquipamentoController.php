@@ -47,7 +47,7 @@ class EquipamentoController extends Controller
     public function index(EquipamentoFilter $filters, EquipamentoService $equipamentoService): JsonResponse
     {
         try {
-            $listEquipamentos = $equipamentoService->list($filters);
+            $listEquipamentos = $equipamentoService->findAll($filters);
 
             if ($listEquipamentos['status'] === false) {
                 return $this->badRequest(message: $listEquipamentos['message']);

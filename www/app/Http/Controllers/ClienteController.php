@@ -50,7 +50,7 @@ class ClienteController extends Controller
     public function index(ClienteFilter $filters, ClienteService $clienteService): JsonResponse
     {
         try {
-            $listClientes = $clienteService->list($filters);
+            $listClientes = $clienteService->findAll($filters);
 
             if ($listClientes['status'] === false) {
                 return $this->badRequest(message: $listClientes['message']);

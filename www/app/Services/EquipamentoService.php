@@ -11,7 +11,7 @@ class EquipamentoService
 {
     use ServiceResponse;
 
-    public function list(EquipamentoFilter $filters): array
+    public function findAll(EquipamentoFilter $filters): array
     {
         return $this->response(
             message: 'Lista de equipamentos.',

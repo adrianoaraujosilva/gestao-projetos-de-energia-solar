@@ -52,7 +52,7 @@ class IntegradorController extends Controller
     public function index(IntegradorFilter $filters, IntegradorService $integradorService): JsonResponse
     {
         try {
-            $listIntegrador = $integradorService->list($filters);
+            $listIntegrador = $integradorService->findAll($filters);
 
             if ($listIntegrador['status'] === false) {
                 return $this->badRequest(message: $listIntegrador['message']);

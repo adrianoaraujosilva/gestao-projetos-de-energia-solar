@@ -11,7 +11,7 @@ class InstalacaoService
 {
     use ServiceResponse;
 
-    public function list(InstalacaoFilter $filters): array
+    public function findAll(InstalacaoFilter $filters): array
     {
         return $this->response(
             message: 'Lista de Instalações.',

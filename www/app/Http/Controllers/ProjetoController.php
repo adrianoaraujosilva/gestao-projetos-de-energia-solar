@@ -51,7 +51,7 @@ class ProjetoController extends Controller
     public function index(ProjetoFilter $filters, ProjetoService $projetoService): JsonResponse
     {
         try {
-            $listProjetos = $projetoService->list($filters);
+            $listProjetos = $projetoService->findAll($filters);
 
             if ($listProjetos['status'] === false) {
                 return $this->badRequest(message: $listProjetos['message']);
