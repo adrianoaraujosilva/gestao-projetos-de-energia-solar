@@ -7,38 +7,16 @@ use App\Http\Resources\ClienteResource;
 use Tests\TestCase;
 
 use App\Models\Cliente;
-use App\Models\Integrador;
 use App\Services\ClienteService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;;
+use Illuminate\Support\Facades\Auth;
 
 class ClienteServiceTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    // private string $clienteEndpoint = '/api/clientes';
-    // private Integrador $integrador;
-    // private Cliente $cliente;
-
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
-    //     // Executa migrações e semea o banco
-    //     Artisan::call('migrate');
-    //     Artisan::call('db:seed');
-
-    //     // Recupera 1º integrador
-    //     $this->integrador = Integrador::where('tipo', 'INTEGRADOR')->first();
-    //     // Recupera 1º cliente do integrador
-    //     $this->cliente = $this->integrador->cliente()->first();
-    // }
 
     public function testFindAll(): void
     {
-
         // Criar alguns clientes de exemplo
         Cliente::factory(5)->create();
 
@@ -94,24 +72,24 @@ class ClienteServiceTest extends TestCase
         $this->assertInstanceOf(ClienteResource::class, $result['content']);
     }
 
-    // public function testUpdate()
-    // {
-    //     // Criar um cliente de exemplo
-    //     $cliente = Cliente::factory()->create();
+    public function testUpdate()
+    {
+        // Criar um cliente de exemplo
+        $cliente = Cliente::factory()->create();
 
-    //     // Gerar dados de atualização de cliente de exemplo
-    //     $requestData = Cliente::factory()->make()->toArray();
+        // Gerar dados de atualização de cliente de exemplo
+        $requestData = Cliente::factory()->make()->toArray();
 
-    //     // Chamar o método update da ClienteService
-    //     $clienteService = new ClienteService();
-    //     $result = $clienteService->update($cliente, $requestData);
+        // Chamar o método update da ClienteService
+        $clienteService = new ClienteService();
+        $result = $clienteService->update($cliente, $requestData);
 
-    //     // Verificar se o resultado possui a estrutura correta
-    //     $this->assertArrayHasKey('message', $result);
-    //     $this->assertEquals('Cliente atualizado com sucesso.', $result['message']);
-    //     $this->assertArrayHasKey('content', $result);
-    //     $this->assertInstanceOf(ClienteResource::class, $result['content']);
-    // }
+        // Verificar se o resultado possui a estrutura correta
+        $this->assertArrayHasKey('message', $result);
+        $this->assertEquals('Cliente atualizado com sucesso.', $result['message']);
+        $this->assertArrayHasKey('content', $result);
+        $this->assertInstanceOf(ClienteResource::class, $result['content']);
+    }
 
     public function testCreateValidationErrors()
     {
