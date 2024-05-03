@@ -4,32 +4,29 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 
-use App\Models\Cliente;
+use App\Models\Instalacao;
 use App\Models\Integrador;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ClienteControllerTest extends TestCase
+class InstalacaoControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private string $clienteEndpoint = '/api/clientes';
+    private string $instalacaoEndpoint = '/api/instalacoes';
     private Integrador $integrador;
-    private Cliente $cliente;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         // Recupera 1º integrador
-        $this->integrador = Integrador::where('tipo', 'INTEGRADOR')->first();
-        // Recupera 1º cliente do integrador
-        $this->cliente = $this->integrador->cliente()->first();
+        $this->integrador = Integrador::where('tipo', 'ADMIN')->first();
     }
 
     public function testIndex(): void
     {
         // Simule uma requisição para o método index
-        $response = $this->actingAs($this->integrador)->get($this->clienteEndpoint);
+        $response = $this->actingAs($this->integrador)->get($this->instalacaoEndpoint);
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -37,11 +34,11 @@ class ClienteControllerTest extends TestCase
 
     public function testStore(): void
     {
-        // Crie um cliente de exemplo
-        $cliente = Cliente::factory(['integrador_id' => $this->integrador->id])->make()->toArray();
+        // Crie uma instalação de exemplo
+        $intalacao = Instalacao::factory()->make()->toArray();
 
         // Simule uma requisição POST com dados válidos
-        $response = $this->actingAs($this->integrador)->post($this->clienteEndpoint, $cliente);
+        $response = $this->actingAs($this->integrador)->post($this->instalacaoEndpoint, $intalacao);
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -49,8 +46,11 @@ class ClienteControllerTest extends TestCase
 
     public function testShow()
     {
-        // Simule uma requisição para o método show com o ID do cliente criado
-        $response = $this->actingAs($this->integrador)->get("$this->clienteEndpoint/{$this->cliente->id}");
+        // Crie uma instalação de exemplo
+        $intalacao = Instalacao::factory()->create();
+
+        // Simule uma requisição para o método show com o ID da instalação criada
+        $response = $this->actingAs($this->integrador)->get("$this->instalacaoEndpoint/$intalacao->id}");
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -58,11 +58,11 @@ class ClienteControllerTest extends TestCase
 
     public function testUpdate()
     {
-        // Crie um cliente de exemplo
-        $cliente = Cliente::factory()->make()->toArray();
+        // Crie um instalação de exemplo
+        $instalacao = Instalacao::factory()->create()->toArray();
 
         // Simule uma requisição PUT com dados válidos
-        $response = $this->actingAs($this->integrador)->put("$this->clienteEndpoint/{$this->cliente->id}", $cliente);
+        $response = $this->actingAs($this->integrador)->put("$this->instalacaoEndpoint/{$instalacao['id']}", $instalacao);
 
         // Verificar se a resposta é um JSON e se o status é 200
         $response->assertJsonStructure(['message', 'content'])->assertStatus(200);
@@ -71,7 +71,7 @@ class ClienteControllerTest extends TestCase
     public function testValidationErrorsOnStore()
     {
         // Simular uma requisição POST com dados inválidos
-        $response = $this->actingAs($this->integrador)->post($this->clienteEndpoint, []);
+        $response = $this->actingAs($this->integrador)->post($this->instalacaoEndpoint, []);
 
         // Verificar se a resposta é um JSON e se o status é 422 (Unprocessable Entity)
         $response->assertJsonStructure(['message', 'errors'])->assertStatus(422);
@@ -80,7 +80,7 @@ class ClienteControllerTest extends TestCase
     public function testNotFoundOnShow()
     {
         // Simular uma requisição para o método show com um ID inexistente
-        $response = $this->actingAs($this->integrador)->get("$this->clienteEndpoint/9999");
+        $response = $this->actingAs($this->integrador)->get("$this->instalacaoEndpoint/9999");
 
         // Verificar se a resposta é um JSON e se o status é 404 (Not Found)
         $response->assertJsonStructure(['message'])->assertStatus(404);
