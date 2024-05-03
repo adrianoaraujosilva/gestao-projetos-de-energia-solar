@@ -38,7 +38,7 @@ class ClienteService
     public function find(Cliente $cliente): array
     {
         return $this->response(
-            message: "Cliente ID: {$cliente->id}.",
+            message: "Cliente ID: {$cliente->id}",
             content: new ClienteResource($cliente->loadMissing('integrador'))
         );
     }

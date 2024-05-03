@@ -33,7 +33,7 @@ class InstalacaoService
     public function find(Instalacao $instalacao): array
     {
         return $this->response(
-            message: "Instalação ID: {$instalacao->id}.",
+            message: "Instalação ID: {$instalacao->id}",
             content: new InstalacaoResource($instalacao)
         );
     }
@@ -43,7 +43,7 @@ class InstalacaoService
         $updateInstalacao = tap($instalacao)->update($request);
 
         return $this->response(
-            message: 'Instalacao atualizado com sucesso.',
+            message: 'Instalação atualizada com sucesso.',
             content: new InstalacaoResource($updateInstalacao)
         );
     }
