@@ -28,9 +28,10 @@ class ProjetoEquipamentoResource extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+        $data = [];
         foreach ($this as $key => $equipamento) {
             $data[$key] = [
-                'id'    => $equipamento->id,
+                'id'                => $equipamento->id,
                 'nome'              => $equipamento->nome,
                 'quantidade'        => $equipamento->pivot->quantidade,
                 'descricacao'       => $equipamento->pivot->descricao,

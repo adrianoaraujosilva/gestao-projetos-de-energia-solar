@@ -59,6 +59,13 @@ class Integrador extends Authenticatable
         return $this->hasMany(Cliente::class, 'integrador_id', 'id');
     }
 
+    public function scopeProjeto($query)
+    {
+        return $query->join('clientes', 'integradores.id', '=', 'clientes.integrador_id')
+            ->join('projetos', 'clientes.id', '=', 'projetos.cliente_id')
+            ->select(['projetos.*', 'integradores.id as integrador_id']);
+    }
+
     public function scopeIsAdmin($query)
     {
         return $this->tipo === $this::ACCESS_ADMIN;

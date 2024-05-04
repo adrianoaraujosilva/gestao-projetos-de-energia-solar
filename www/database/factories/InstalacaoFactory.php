@@ -17,7 +17,7 @@ class InstalacaoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome' => fake()->asciify('*********************')
+            'nome' => fake()->unique()->asciify('*********************'),
         ];
     }
 }
