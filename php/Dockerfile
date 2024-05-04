@@ -30,26 +30,22 @@ RUN docker-php-ext-install gd
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
 # Copy existing application directory contents
 COPY ./www /var/www
+
+RUN composer install
+
+RUN chmod -R 777 /var/log/
+RUN chmod -R 777 /var/www/storage
+RUN chmod -R 777 /var/www/public
 
 # Set timezone
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
-
-# Change current user to www
-USER www
-
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 
-# ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["php-fpm"]
