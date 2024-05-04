@@ -86,7 +86,7 @@ class EquipamentoServiceTest extends TestCase
 
         // Verificar se o resultado possui a estrutura correta
         $this->assertArrayHasKey('message', $result);
-        $this->assertEquals('equipamento atualizada com sucesso.', $result['message']);
+        $this->assertEquals('Equipamento atualizado com sucesso.', $result['message']);
         $this->assertArrayHasKey('content', $result);
         $this->assertInstanceOf(EquipamentoResource::class, $result['content']);
     }
@@ -122,6 +122,6 @@ class EquipamentoServiceTest extends TestCase
 
         // Verificar se o resultado possui a estrutura correta
         $this->assertArrayHasKey('message', $result);
-        $this->assertEquals('equipamento não encontrada.', $result['message']);
+        $this->assertEquals('Equipamento não encontrado.', $result['message']);
     }
 }

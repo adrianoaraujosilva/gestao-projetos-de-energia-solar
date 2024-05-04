@@ -23,7 +23,7 @@ class ClienteFactory extends Factory
             'email'         => fake()->unique()->safeEmail(),
             'integrador_id' => fake()->randomElement($integradores),
             'telefone'      => fake()->cellphoneNumber(),
-            'cpf_cnpj'      => fake()->cpf(),
+            'cpf_cnpj'      => fake()->unique()->cpf(),
         ];
     }
 }

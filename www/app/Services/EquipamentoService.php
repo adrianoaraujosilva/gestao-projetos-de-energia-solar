@@ -6,6 +6,8 @@ use App\Filters\EquipamentoFilter;
 use App\Http\Resources\EquipamentoResource;
 use App\Models\Equipamento;
 use App\Traits\ServiceResponse;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class EquipamentoService
 {
@@ -14,7 +16,7 @@ class EquipamentoService
     public function findAll(EquipamentoFilter $filters): array
     {
         return $this->response(
-            message: 'Lista de equipamentos.',
+            message: 'Lista de Equipamentos.',
             content: Equipamento::filter($filters)
                 ->paginate()
         );
@@ -25,7 +27,7 @@ class EquipamentoService
         $createEquipamento = Equipamento::create($request);
 
         return $this->response(
-            message: 'Equipamento cadastrada com sucesso.',
+            message: 'Equipamento cadastrado com sucesso.',
             content: new EquipamentoResource($createEquipamento)
         );
     }
@@ -40,11 +42,18 @@ class EquipamentoService
 
     public function update(Equipamento $equipamento, array $request): array
     {
-        $updateEquipamento = tap($equipamento)->update($request);
+        try {
+            Equipamento::findOrFail($equipamento->id ?? null);
 
-        return $this->response(
-            message: 'Equipamento atualizado com sucesso.',
-            content: new EquipamentoResource($updateEquipamento)
-        );
+            $updateEquipamento = tap($equipamento)->update($request);
+
+            return $this->response(
+                message: 'Equipamento atualizado com sucesso.',
+                content: new EquipamentoResource($updateEquipamento)
+            );
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            return $this->response(status: false, message: "Equipamento não encontrado.");
+        }
     }
 }
